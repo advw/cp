@@ -1,10 +1,6 @@
 # JUSCOPY
 ## Gratuito, simples e automático
 
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
 Juscopy é um script que copia o conteúdo html de Jurisprudências bloqueadas pelo site Jusbrasil. Juscopy é baseado em nuvem e precisa de conexão com a internet.
 
 - Copie o script
