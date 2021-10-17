@@ -31,17 +31,18 @@ var modalAlerts = {
 
 var commonSel = {
     modeloPecas: "#app-root > div > div.WithMetricsDispatcher > div > div > div.DocumentPage-card > div > div.DocumentPage-navbar-wrapper > div > div > div > div.DocumentActionsCard-actions",
-    jurisprudencia: "#app-root > div > div.portal-container > div > span > div > div.modal-dialog.modal-dialog-full > div > div.modal-"
+    jurisprudencia: "#app-root > div > div.portal-container > div > span > div > div.modal-dialog.modal-dialog-full > div > div.modal-",
+    processos: "#app-root > div > div.WithMetricsDispatcher > div > div.MotionPage-card.card > div > div > div."
 }
 
 function juscopyBtn(father) {
     //Cria um botão novo
     var btnJuscopy = document.createElement('a')
     btnJuscopy.classList.add('btn')
-    btnJuscopy.classList.add('btn--blue')
+    btnJuscopy.classList.add('btn--orange')
     btnJuscopy.setAttribute("onclick", "disableModal()")
     btnJuscopy.innerText = "Copiar com Juscopy"
-        //adiciona o ícone ao botão
+    //adiciona o ícone ao botão
     var icon = document.createElement('span');
     icon.classList.add('icon');
     icon.classList.add('icon-content-copy');
@@ -51,7 +52,6 @@ function juscopyBtn(father) {
 }
 
 if (url().href.match(regex('modelos-pecas'))) {
-
     //Remove os botões download e copiar da jurisprudência
     var removeBtn = id => {
         var btn = document.querySelector(commonSel.modeloPecas + ` > div:nth-child(${id})`)
@@ -65,15 +65,25 @@ if (url().href.match(regex('modelos-pecas'))) {
     function data() {
         return {
             selector: '#app-root > div > div.WithMetricsDispatcher > div > div > div.DocumentPage-card > div > div.unprintable',
-            alert: modalAlerts
+            alert: modalAlerts.success
         }
     }
 
+} else if (url().href.match(regex('processos'))) {
+    var btnRemove = document.querySelector(commonSel.processos + "MotionPage-toolBar > div > div > div > div > div.ToolBarBase-leftActions > button");
+    btnRemove.remove();
+    juscopyBtn(commonSel.processos + "MotionPage-toolBar > div > div > div > div > div.ToolBarBase-leftActions");
+
+    function data() {
+        return {
+            selector: commonSel.processos + 'unprintable'
+        }
+    }
 } else if (url().href.match(regex('jurisprudencia'))) {
     try {
         var btn = document.querySelector("#app-root > div > div.WithMetricsDispatcher > div > div > div.DocumentPage-main.col-md-8.card > div:nth-child(1) > div > div.DocumentPage-tools > div > div > div > div.ToolBarBase-leftActions > button");
         btn.click()
-    } catch (e) {}
+    } catch (e) { }
 
     var btnEmenta = document.querySelector(commonSel.jurisprudencia + "footer.CopyContentModal-footer > button.CopyContentModal-copyButton.btn.btn--md.btn--blue");
     btnEmenta.remove()
@@ -83,39 +93,23 @@ if (url().href.match(regex('modelos-pecas'))) {
 
     function data() {
         return {
-            selector: commonSel.jurisprudencia + "body > div",
-            alert: modalAlerts
+            selector: commonSel.jurisprudencia + "body > div"
         }
     }
 
 } else {
-    try {
-        Swal.fire({
-            title: "<strong>Ooops!</strong>",
-            icon: 'error',
-            showConfirmButton: false,
-            html: `Parece que você não está no ambiente correto
-    <br>Tente acessar as páginas de Jurisprudência ou de Modelos de Peças no Jusbrasil`
-        })
-    } catch (error) {
-        console.log('Você não está em um ambiente correto');
-    }
+    throw new console.error("Você não está no ambiente correto do jusbrasil");
 }
 
-
-function disableModal() {
+var disableModal = () => {
     var peticao = document.querySelector(data().selector).innerText
-    var createElementToCopy = document.createElement('textarea');
-    createElementToCopy.innerText = peticao;
-    document.body.appendChild(createElementToCopy);
-    createElementToCopy.focus();
-    createElementToCopy.select();
-    document.execCommand('copy')
-    createElementToCopy.remove();
+    //Copia para a área de transferência
+    navigator.clipboard.writeText(peticao)
     Swal.fire(modalAlerts.success)
     scroll(0, 0)
     try {
+        //fecha a modal no caso de jurisprudência
         var btnFechar = document.querySelector(commonSel.jurisprudencia + "footer.CopyContentModal-footer > button");
         btnFechar.click()
-    } catch (e) {}
+    } catch (e) { }
 }
