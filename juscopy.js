@@ -56,44 +56,42 @@ if (url().href.match(regex('modelos-pecas'))) {
     removeBtn(".DocumentActionsCard-copy-btn")
 
     juscopyBtn(".DocumentActionsCard-actions");
-
-    function data() {
-        return ".unprintable"
+    var disableModal = () => {
+        var juscopy = document.querySelector(".unprintable")
+        navigator.clipboard.writeText(juscopy.innerText)
+        Swal.fire(modalAlerts.success)
+        scroll(0, 0)
     }
 
 } else if (url().href.match(regex('processos'))) {
     removeBtn("button.btn--blue:nth-child(1)")
     juscopyBtn(".ToolBarBase-leftActions");
-
-    function data() {
-        return "div.unprintable:nth-child(5)"
+    var disableModal = () => {
+        var juscopy = document.querySelector("div.unprintable:nth-child(5)")
+        navigator.clipboard.writeText(juscopy.innerText)
+        Swal.fire(modalAlerts.success)
+        scroll(0, 0)
     }
+
 } else if (url().href.match(regex('jurisprudencia'))) {
     try {
         var btn = document.querySelector("button.btn--blue");
         btn.click()
     } catch (e) { }
-
     removeBtn(".CopyContentModal-copyButton")
-
     juscopyBtn(".modal-footer")
-
-    function data() {
-        return ".modal-body > div:nth-child(2)"
+    var disableModal = () => {
+        var juscopy = document.querySelector(".modal-body > div:nth-child(2)");
+        navigator.clipboard.writeText(peticao)
+        Swal.fire(modalAlerts.success)
+        scroll(0, 0)
+        try {
+            //fecha a modal no caso de jurisprudência
+            var btnFechar = document.querySelector(".CopyContentModal-closeButton");
+            btnFechar.click()
+        } catch (e) { }
     }
+
 } else {
     throw new console.error("Você não está no ambiente correto do jusbrasil");
-}
-
-var disableModal = () => {
-    var peticao = document.querySelector(data()).innerText
-    //Copia para a área de transferência
-    navigator.clipboard.writeText(peticao)
-    Swal.fire(modalAlerts.success)
-    scroll(0, 0)
-    try {
-        //fecha a modal no caso de jurisprudência
-        var btnFechar = document.querySelector(".CopyContentModal-closeButton");
-        btnFechar.click()
-    } catch (e) { }
 }
