@@ -82,7 +82,7 @@ if (url().href.match(regex('modelos-pecas'))) {
     juscopyBtn(".modal-footer")
     var disableModal = () => {
         var juscopy = document.querySelector(".modal-body > div:nth-child(2)");
-        navigator.clipboard.writeText(peticao)
+        navigator.clipboard.writeText(juscopy.innerText)
         Swal.fire(modalAlerts.success)
         scroll(0, 0)
         try {
