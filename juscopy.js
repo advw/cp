@@ -51,6 +51,19 @@ function juscopyBtn(father) {
     divToAppend.appendChild(btnJuscopy)
 }
 
+var disableModal = () => {
+    var peticao = document.querySelector(data().selector).innerText
+    //Copia para a área de transferência
+    navigator.clipboard.writeText(peticao)
+    Swal.fire(modalAlerts.success)
+    scroll(0, 0)
+    try {
+        //fecha a modal no caso de jurisprudência
+        var btnFechar = document.querySelector(commonSel.jurisprudencia + "footer.CopyContentModal-footer > button");
+        btnFechar.click()
+    } catch (e) { }
+}
+
 if (url().href.match(regex('modelos-pecas'))) {
     //Remove os botões download e copiar da jurisprudência
     var removeBtn = id => {
@@ -99,17 +112,4 @@ if (url().href.match(regex('modelos-pecas'))) {
 
 } else {
     throw new console.error("Você não está no ambiente correto do jusbrasil");
-}
-
-var disableModal = () => {
-    var peticao = document.querySelector(data().selector).innerText
-    //Copia para a área de transferência
-    navigator.clipboard.writeText(peticao)
-    Swal.fire(modalAlerts.success)
-    scroll(0, 0)
-    try {
-        //fecha a modal no caso de jurisprudência
-        var btnFechar = document.querySelector(commonSel.jurisprudencia + "footer.CopyContentModal-footer > button");
-        btnFechar.click()
-    } catch (e) { }
 }
